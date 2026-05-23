@@ -15,9 +15,6 @@ echo "$PASSWORD" | docker login $REGISTRY \
 -u $USERNAME \
 --password-stdin
 
-npm install
-npm run build
-
 docker build \
 -f Dockerfile \
 -t $FULL_IMAGE:latest \
