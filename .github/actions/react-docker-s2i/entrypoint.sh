@@ -23,8 +23,6 @@ docker build \
 -t $FULL_IMAGE:latest \
 -t $FULL_IMAGE:$SHA_TAG .
 
-echo "Pushing images..."
-
 docker push $FULL_IMAGE:latest
 docker push $FULL_IMAGE:$SHA_TAG
 
