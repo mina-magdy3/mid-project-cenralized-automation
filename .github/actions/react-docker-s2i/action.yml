@@ -1,0 +1,35 @@
+name: source to image custom action
+description: docker custom action
+inputs:
+   registery:
+     type: string
+     required: true
+   username:
+     type: string
+     required: true
+   password:
+     type: string
+     required: true
+   image-name:
+     type: string
+     required: true
+   tag:
+     type: string
+     default: latest
+     required: false
+outputs:
+  image_name:
+    description: full image name with sha
+  image_digest:
+    description: docker image digest
+  push_status:
+    description: push status
+runs:
+  using: 'docker'
+  image: Dockerfile
+  args:
+    - ${{inputs.registery}}
+    - ${{inputs.username}}
+    - ${{inputs.password}}
+    - ${{inputs.image-name}}
+    - ${{inputs.tag}}

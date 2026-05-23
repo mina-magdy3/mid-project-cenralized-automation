@@ -1,0 +1,70 @@
+name: template
+on:
+  workflow_call:
+    inputs:
+      dotnet_version:
+        required: true
+        type: string
+      run_test:
+        required: true
+        type: boolean
+      project-path:
+        required: true
+        type: string
+      build-configuration: 
+        required: true
+        type: string
+jobs:
+    job_1:
+        runs-on: ubuntu-latest
+        steps:
+            - name: setup dotnet
+              uses: actions/setup-dotnet@v4
+              with:
+                dotnet-version: ${{inputs.dotnet_version}} 
+            - name: build phase
+              run: |
+                dotnet build
+                dotnet publish --output ./build-output
+            - name: test phase
+              run: dotnet test
+              if:  ${{inputs.run_test==true}}
+            - name: Run Gitleaks
+              uses: gitleaks/gitleaks-action@v2
+              continue-on-error: true
+            - name: Upload SARIF to GitHub
+              uses: github/codeql-action/upload-sarif@v3
+              with:
+                sarif_file: results.sarif
+                category: gitleaks
+            - name: Initialize CodeQL
+              uses: github/codeql-action/init@v3
+              with:
+               languages: c#
+            - name: Perform CodeQL Analysis
+              uses: github/codeql-action/analyze@v3
+            - name: docker login 
+              uses: docker/login-action@v2
+              with:
+                registry: ghcr.io
+                username:  ${{ github.actor }}
+                password: ${{ github.token }}
+            - name: build docker image and pushing it
+              uses: docker/build-push-action@v6.18.0
+              with: 
+                push: true
+                context: .
+                tags: 
+                   ghcr.io/${{ github.actor }}/dotnet:${{github.output.sha}}
+                   ghcr.io/${{ github.actor }}/dotnet:latest
+            - name: Run Trivy vulnerability scanner
+              uses: aquasecurity/trivy-action@0.35.0
+              with:
+                image-ref: 'ghcr.io/${{ github.actor }}/dotnet:${{ github.sha }}'
+                format: 'sarif'
+                output: 'trivy-results.sarif'
+                severity: 'CRITICAL,HIGH'
+            - name: Upload Trivy scan results to GitHub Security tab
+              uses: github/codeql-action/upload-sarif@v4
+              with:
+                 sarif_file: 'trivy-results.sarif' 
