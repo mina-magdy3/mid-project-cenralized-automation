@@ -27,5 +27,4 @@ outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  env:
-    DOCKER_HOST: unix://var/run/docker.sock
+
