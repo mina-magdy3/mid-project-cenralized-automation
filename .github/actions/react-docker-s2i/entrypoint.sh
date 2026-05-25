@@ -1,5 +1,4 @@
 #!/bin/bash
-# Location: .github/actions/react-docker-s2i/entrypoint.sh
 set -e
 
 echo "Starting isolated Docker-in-Docker engine..."
@@ -17,15 +16,12 @@ PASSWORD=$INPUT_PASSWORD
 IMAGE_NAME=$INPUT_IMAGE_NAME
 TAG=$INPUT_TAG
 
-FINAL_IMAGE="${REGISTRY}/${IMAGE_NAME}:${TAG}"
+FINAL_IMAGE="${REGISTRY}/${USERNAME}/${IMAGE_NAME}:${TAG}"
 
-# Log in to registry
 echo "$PASSWORD" | docker login "$REGISTRY" -u "$USERNAME" --password-stdin
 
-# 👑 FIX: Point the build flag directly to the internal image path we baked in
 docker build -f /usr/local/bin/Dockerfile.react -t "$FINAL_IMAGE" .
 
-# Push to GHCR
 if docker push "$FINAL_IMAGE"; then
     IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$FINAL_IMAGE" | cut -d'@' -f2)
     echo "image_name=${FINAL_IMAGE}" >> "$GITHUB_OUTPUT"
