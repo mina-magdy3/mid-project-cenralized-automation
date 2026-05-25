@@ -1,7 +1,5 @@
 FROM nginx:alpine
 
-RUN apk add --no-cache docker-cli bash
-
 RUN rm -rf /usr/share/nginx/html/*
 
 COPY ./frontend/dist /usr/share/nginx/html
@@ -17,6 +15,5 @@ RUN echo 'server { \
 
 EXPOSE 80
 
-ENTRYPOINT ["/bin/bash", ".github/actions/react-docker-s2i/entrypoint.sh"]
-
+CMD ["nginx", "-g", "daemon off;"]
 

@@ -26,7 +26,4 @@ outputs:
     description: push status
 runs:
   using: 'docker'
-  image: 'Dockerfile.react'
-  args:
-    - -v
-    - /var/run/docker.sock:/var/run/docker.sock
+  image: 'Dockerfile'
