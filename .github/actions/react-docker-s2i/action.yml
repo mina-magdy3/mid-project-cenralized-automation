@@ -26,7 +26,7 @@ outputs:
     description: push status
 runs:
   using: 'docker'
-  image: Dockerfile
+  image: 'Dockerfile.react'
   args:
     - ${{inputs.registery}}
     - ${{inputs.username}}

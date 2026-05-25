@@ -1,32 +1,32 @@
-#!/bin/sh
-
+#!/bin/bash
 set -e
-REGISTRY=$1
-USERNAME=$2
-PASSWORD=$3
-IMAGE_NAME=$4
-TAG=${5:-latest}
 
-SHA_TAG=$(git rev-parse --short HEAD)
+REGISTRY=$INPUT_REGISTRY
+USERNAME=$INPUT_USERNAME
+PASSWORD=$INPUT_PASSWORD
+IMAGE_NAME=$INPUT_IMAGE_NAME
+TAG=$INPUT_TAG
 
-FULL_IMAGE="$REGISTRY/$USERNAME/$IMAGE_NAME"
+FINAL_IMAGE="${REGISTRY}/${USERNAME}/${IMAGE_NAME}:${TAG}"
 
-echo "$PASSWORD" | docker login $REGISTRY \
--u $USERNAME \
---password-stdin
+echo "$PASSWORD" | docker login "$REGISTRY" -u "$USERNAME" --password-stdin
 
-docker build \
--f Dockerfile \
--t $FULL_IMAGE:latest \
--t $FULL_IMAGE:$SHA_TAG .
+if [ ! -d "dist" ]; then
+    echo "❌ Error: 'dist/' folder not found. Did you forget to build your React app?"
+    echo "push_status=failed" >> "$GITHUB_OUTPUT"
+    exit 1
+fi
 
-docker push $FULL_IMAGE:latest
-docker push $FULL_IMAGE:$SHA_TAG
+docker build -f .github/actions/react-docker-s2i/Dockerfile.react -t "$FINAL_IMAGE" .
 
-DIGEST=$(docker inspect \
---format='{{index .RepoDigests 0}}' \
-$FULL_IMAGE:$SHA_TAG)
-
-echo "image_name=$FULL_IMAGE:$SHA_TAG" >> $GITHUB_OUTPUT
-echo "image_digest=$DIGEST" >> $GITHUB_OUTPUT
-echo "push_status=success" >> $GITHUB_OUTPUT
+if docker push "$FINAL_IMAGE"; then
+    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$FINAL_IMAGE" | cut -d'@' -f2)
+    
+    echo "image_name=${FINAL_IMAGE}" >> "$GITHUB_OUTPUT"
+    echo "image_digest=${IMAGE_DIGEST}" >> "$GITHUB_OUTPUT"
+    echo "push_status=success" >> "$GITHUB_OUTPUT"
+else
+    echo "❌ Push failed!"
+    echo "push_status=failed" >> "$GITHUB_OUTPUT"
+    exit 1
+fi
