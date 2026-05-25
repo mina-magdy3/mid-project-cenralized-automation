@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-git congfig --global --add safe.directory /github/workspace
+git config --global --add safe.directory /github/workspace
 
 REGISTRY=$INPUT_REGISTRY
 USERNAME=$INPUT_USERNAME
