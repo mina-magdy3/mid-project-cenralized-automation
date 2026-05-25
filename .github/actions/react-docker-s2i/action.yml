@@ -10,7 +10,7 @@ inputs:
    password:
      type: string
      required: true
-   image-name:
+   image_name:
      type: string
      required: true
    tag:
