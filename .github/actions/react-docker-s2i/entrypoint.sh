@@ -13,6 +13,7 @@ echo "$PASSWORD" | docker login "$REGISTRY" -u "$USERNAME" --password-stdin
 
 pwd
 ls -la
+cd React-Frontend
 ls -la dist || echo "dist is missing"
 
 # if [ ! -d "dist" ]; then
