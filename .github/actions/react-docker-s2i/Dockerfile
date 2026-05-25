@@ -1,6 +1,6 @@
-FROM alpine:3.18
+FROM docker:24.0-dind
 
-RUN apk add --no-cache docker-cli bash curl
+RUN apk add --no-cache bash curl
 
 COPY entrypoint.sh /entrypoint.sh
 
