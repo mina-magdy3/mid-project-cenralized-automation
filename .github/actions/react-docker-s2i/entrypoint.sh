@@ -16,12 +16,12 @@ if [ ! -d "dist" ]; then
     exit 1
 fi
 
-docker build -f .github/actions/react-docker-s2i/Dockerfile.react -t "$FINAL_IMAGE" .
+docker build -f .github/actions/react-docker-s2i/Dockerfile.react -t "$FINAL_IMAGE:$TAG" .
 
-if docker push "$FINAL_IMAGE"; then
-    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$FINAL_IMAGE" | cut -d'@' -f2)
+if docker push "$FINAL_IMAGE:$TAG"; then
+    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$FINAL_IMAGE:$TAG" | cut -d'@' -f2)
     
-    echo "image_name=${FINAL_IMAGE}" >> "$GITHUB_OUTPUT"
+    echo "image_name=${FINAL_IMAGE}:${TAG}" >> "$GITHUB_OUTPUT"
     echo "image_digest=${IMAGE_DIGEST}" >> "$GITHUB_OUTPUT"
     echo "push_status=success" >> "$GITHUB_OUTPUT"
 else
