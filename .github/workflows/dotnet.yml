@@ -58,7 +58,7 @@ jobs:
               uses: docker/build-push-action@v6.18.0
               with: 
                 push: true
-                context: ${{inputs.project-path}}
+                context: .
                 tags: |
                    ghcr.io/${{ github.actor }}/dotnet:latest
                   #  ghcr.io/${{ github.actor }}/dotnet:${{github.sha}}
