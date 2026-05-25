@@ -61,7 +61,7 @@ jobs:
                 context: .
                 tags: 
                   #  ghcr.io/${{ github.actor }}/dotnet:${{github.sha}}
-                   ghcr.io/${{ github.actor }}/dotnet:latest
+                   latest
             - name: Run Trivy vulnerability scanner
               uses: aquasecurity/trivy-action@0.35.0
               with:
