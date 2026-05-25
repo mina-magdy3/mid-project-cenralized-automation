@@ -1,7 +1,7 @@
 name: source to image custom action
 description: docker custom action
 inputs:
-   registery:
+   registry:
      type: string
      required: true
    username:
