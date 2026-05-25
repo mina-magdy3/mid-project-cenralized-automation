@@ -58,7 +58,8 @@ jobs:
               uses: docker/build-push-action@v6.18.0
               with: 
                 push: true
-                context: .
+                context: ./DotNet-Backend
+                file: ./DotNet-Backend/Dockerfile
                 tags: |
                    ghcr.io/${{ github.actor }}/dotnet:latest
                    ghcr.io/${{ github.actor }}/dotnet:${{github.sha}}
