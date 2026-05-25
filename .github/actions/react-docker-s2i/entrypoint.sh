@@ -2,10 +2,10 @@
 set -e
 
 
-dockerd-entrypoint.sh > /tmp/dockerd.log 2>&1 &
-until docker info >/dev/null 2>&1; do
-  sleep 1
-done
+# dockerd-entrypoint.sh > /tmp/dockerd.log 2>&1 &
+# until docker info >/dev/null 2>&1; do
+#   sleep 1
+# done
 
 REGISTRY=$INPUT_REGISTRY
 USERNAME=$INPUT_USERNAME
