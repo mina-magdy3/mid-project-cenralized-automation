@@ -27,6 +27,10 @@ jobs:
               uses: actions/setup-dotnet@v4
               with:
                 dotnet-version: ${{inputs.dotnet_version}} 
+            - name: Initialize CodeQL
+              uses: github/codeql-action/init@v3
+              with:
+               languages: 'csharp'
             - name: build phase
               run: |
                 dotnet build
@@ -42,10 +46,10 @@ jobs:
               with:
                 sarif_file: results.sarif
                 category: gitleaks
-            - name: Initialize CodeQL
-              uses: github/codeql-action/init@v3
-              with:
-               languages: 'csharp'
+            # - name: Initialize CodeQL
+            #   uses: github/codeql-action/init@v3
+            #   with:
+            #    languages: 'csharp'
             - name: Perform CodeQL Analysis
               uses: github/codeql-action/analyze@v3
             - name: docker login 
