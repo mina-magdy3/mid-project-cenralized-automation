@@ -58,10 +58,10 @@ jobs:
               uses: docker/build-push-action@v6.18.0
               with: 
                 push: true
-                context: .
-                tags: 
-                  #  ghcr.io/${{ github.actor }}/dotnet:${{github.sha}}
-                   latest
+                context: ${{inputs.project-path}}
+                tags: |
+                   ghcr.io/${{ github.actor }}/dotnet:${{github.sha}}
+                   ghcr.io/${{ github.actor }}/dotnet:latest
             - name: Run Trivy vulnerability scanner
               uses: aquasecurity/trivy-action@0.35.0
               with:
