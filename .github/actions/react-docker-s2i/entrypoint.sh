@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+dockerd --host=unix://var/usr/docker.sock &
+until docker info >/dev/null 2>&1; do
+  sleep 1
+done
+
 REGISTRY=$INPUT_REGISTRY
 USERNAME=$INPUT_USERNAME
 PASSWORD=$INPUT_PASSWORD

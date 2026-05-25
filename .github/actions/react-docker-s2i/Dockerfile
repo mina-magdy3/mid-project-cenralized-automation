@@ -1,4 +1,4 @@
-FROM docker:24.0-cli
+FROM docker:24.0-dind
 
 RUN apk add --no-cache bash curl
 
