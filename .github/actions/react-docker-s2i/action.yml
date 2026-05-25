@@ -28,8 +28,5 @@ runs:
   using: 'docker'
   image: 'Dockerfile.react'
   args:
-    - ${{inputs.registery}}
-    - ${{inputs.username}}
-    - ${{inputs.password}}
-    - ${{inputs.image-name}}
-    - ${{inputs.tag}}
+    - -v
+    - /var/run/docker.sock:/var/run/docker.sock
