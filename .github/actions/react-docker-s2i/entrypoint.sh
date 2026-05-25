@@ -12,7 +12,6 @@ FINAL_IMAGE="${REGISTRY}/${USERNAME}/${IMAGE_NAME}:${TAG}"
 echo "$PASSWORD" | docker login "$REGISTRY" -u "$USERNAME" --password-stdin
 
 if [ ! -d "dist" ]; then
-    echo "❌ Error: 'dist/' folder not found. Did you forget to build your React app?"
     echo "push_status=failed" >> "$GITHUB_OUTPUT"
     exit 1
 fi
@@ -26,7 +25,6 @@ if docker push "$FINAL_IMAGE"; then
     echo "image_digest=${IMAGE_DIGEST}" >> "$GITHUB_OUTPUT"
     echo "push_status=success" >> "$GITHUB_OUTPUT"
 else
-    echo "❌ Push failed!"
     echo "push_status=failed" >> "$GITHUB_OUTPUT"
     exit 1
 fi
