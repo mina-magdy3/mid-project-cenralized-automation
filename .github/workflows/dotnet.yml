@@ -15,7 +15,7 @@ on:
         required: true
         type: string
 jobs:
-    job_1:
+    dotnet-ci:
         runs-on: ubuntu-latest
         defaults:
           run: 
