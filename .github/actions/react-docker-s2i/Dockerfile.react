@@ -2,7 +2,7 @@ FROM nginx:alpine
 
 RUN rm -rf /usr/share/nginx/html/*
 
-COPY ./dist /usr/share/nginx/html
+COPY ./React-Frontend/dist /usr/share/nginx/html
 
 RUN echo 'server { \
     listen 80; \
